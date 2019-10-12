@@ -1,91 +1,38 @@
 <template>
-  <div class="container">
-    <b-card-group deck class="mt-4">
-      <b-card
-        title="Title"
-        img-src="https://wallpapersite.com/images/pages/pic_w/15948.jpg"
-        img-alt="Image"
-        img-top
-      >
-        <b-card-text>
-          This is a wider card with supporting text below as a natural lead-in to additional content.
-          This content is a little bit longer.
-        </b-card-text>
-        <b-button to="/detail">View Detail</b-button>
-      </b-card>
 
-      <b-card
-        title="Title"
-        img-src="https://wallpapersite.com/images/pages/pic_w/15927.jpg"
-        img-alt="Image"
-        img-top
-      >
-        <b-card-text>This card has supporting text below as a natural lead-in to additional content.</b-card-text>
-        <b-button to="/detail">View Detail</b-button>
-      </b-card>
-
-      <b-card
-        title="Title"
-        img-src="https://wallpapercave.com/wp/wp1808933.jpg"
-        img-alt="Image"
-        img-top
-      >
-        <b-card-text>
-          This is a wider card with supporting text below as a natural lead-in to additional content.
-          This card has even longer content than the first to show that equal height action.
-        </b-card-text>
-        <b-button to="/detail">View Detail</b-button>
-      </b-card>
-
-      <b-card
-        title="Title"
-        img-src="https://wallpapersite.com/images/pages/pic_w/17994.jpg"
-        img-alt="Image"
-        img-top
-      >
-        <b-card-text>
-          This is a wider card with supporting text below as a natural lead-in to additional content.
-          This content is a little bit longer.
-        </b-card-text>
-        <b-button to="/detail">View Detail</b-button>
-      </b-card>
-
-      <b-card
-        title="Title"
-        img-src="https://wallpapersite.com/images/pages/pic_w/18223.jpg"
-        img-alt="Image"
-        img-top
-      >
-        <b-card-text>This card has supporting text below as a natural lead-in to additional content.</b-card-text>
-      </b-card>
-
-      <b-card
-        title="Title"
-        img-src="https://wallpapersite.com/images/pages/pic_w/17618.jpg"
-        img-alt="Image"
-        img-top
-      >
-        <b-card-text>
-          This is a wider card with supporting text below as a natural lead-in to additional content.
-          This card has even longer content than the first to show that equal height action.
-        </b-card-text>
-        <b-button to="/detail">View Detail</b-button>
-      </b-card>
+  <div class="container-fluid">
+    <h1 class="text-center">Most Popular Movies</h1>
+     <b-card-group deck class="mt-4">
+      <b-row>
+        <b-col v-for="movie in sortedMovies" :key="movie.id" cols="4">
+          <Cart :movie="movie" />
+        </b-col>
+      </b-row>
     </b-card-group>
+    <pre>{{ movies }}</pre>
   </div>
 </template>
 
 <script>
-import Logo from "~/components/Logo.vue";
+import Cart from "~/components/Cart.vue";
+import { mapState } from "vuex";
 
 export default {
   layout: 'layouts/default',
   components: {
-    Logo
+    Cart
+  },
+  computed: {
+    ...mapState({ movies: state => state.movies}),
+    sortedMovies() {
+      return this.movies.sort((a, b) => b.vote_average - a.vote_average);
+    }
+
+  },
+  mounted() {
+    this.$store.dispatch("getMovies");
   }
 };
 </script>
 
-<style>
 
-</style>
